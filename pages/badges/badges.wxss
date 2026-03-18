@@ -1,0 +1,20 @@
+.container { padding: 32rpx; }
+.card-title-top { font-size: 30rpx; font-weight: 600; color: #333; margin-bottom: 32rpx; }
+
+.badges-grid { display: flex; flex-wrap: wrap; gap: 24rpx; }
+.badge-item {
+  width: calc(50% - 12rpx);
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx 24rpx;
+  text-align: center;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.06);
+  box-sizing: border-box;
+}
+.badge-item.locked { opacity: 0.45; }
+.badge-icon { font-size: 64rpx; margin-bottom: 12rpx; }
+.badge-days { font-size: 36rpx; font-weight: 700; color: #4CAF50; }
+.badge-item.locked .badge-days { color: #bbb; }
+.badge-name { font-size: 26rpx; color: #333; margin: 6rpx 0; }
+.badge-status { font-size: 22rpx; color: #4CAF50; }
+.badge-item.locked .badge-status { color: #bbb; }

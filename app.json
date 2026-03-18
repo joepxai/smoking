@@ -1,0 +1,28 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/stats/stats",
+    "pages/badges/badges",
+    "pages/settings/settings"
+  ],
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4CAF50",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "打卡", "iconPath": "assets/tab_home.png", "selectedIconPath": "assets/tab_home_active.png" },
+      { "pagePath": "pages/stats/stats", "text": "统计", "iconPath": "assets/tab_stats.png", "selectedIconPath": "assets/tab_stats_active.png" },
+      { "pagePath": "pages/badges/badges", "text": "徽章", "iconPath": "assets/tab_badge.png", "selectedIconPath": "assets/tab_badge_active.png" },
+      { "pagePath": "pages/settings/settings", "text": "设置", "iconPath": "assets/tab_settings.png", "selectedIconPath": "assets/tab_settings_active.png" }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarTitleText": "戒烟打卡",
+    "navigationBarTextStyle": "white"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

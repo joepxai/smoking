@@ -1,0 +1,48 @@
+<view class="container">
+  <!-- 顶部状态卡 -->
+  <view class="hero-card">
+    <view class="streak-label">连续戒烟</view>
+    <view class="streak-number">{{streak}}</view>
+    <view class="streak-unit">天</view>
+    <view class="reason" wx:if="{{reason}}">💪 {{reason}}</view>
+  </view>
+
+  <!-- 今日打卡 -->
+  <view class="card checkin-card">
+    <view class="checkin-title">今日打卡</view>
+    <view class="checkin-date">{{today}}</view>
+
+    <view wx:if="{{todayRecord === null}}" class="btn-group">
+      <button class="btn-success" bindtap="onCheckin" data-status="success">✅ 今天成功了</button>
+      <button class="btn-fail" bindtap="onCheckin" data-status="fail">😔 今天失败了</button>
+    </view>
+
+    <view wx:else class="checked-result">
+      <text wx:if="{{todayRecord === 'success'}}" class="result-success">✅ 今天打卡成功！继续加油</text>
+      <text wx:else class="result-fail">😔 没关系，明天重新开始</text>
+    </view>
+  </view>
+
+  <!-- 快速统计 -->
+  <view class="card stats-row">
+    <view class="stat-item">
+      <view class="stat-val">{{totalDays}}</view>
+      <view class="stat-lbl">累计天数</view>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <view class="stat-val">¥{{moneySaved}}</view>
+      <view class="stat-lbl">节省金钱</view>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <view class="stat-val">{{daysSinceStart}}</view>
+      <view class="stat-lbl">坚持天数</view>
+    </view>
+  </view>
+
+  <!-- 未设置提示 -->
+  <view wx:if="{{!hasSettings}}" class="card setup-tip" bindtap="goSettings">
+    <text>👆 先去设置开始日期和戒烟理由</text>
+  </view>
+</view>

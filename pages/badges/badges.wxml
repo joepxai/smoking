@@ -1,0 +1,11 @@
+<view class="container">
+  <view class="card-title-top">🏅 里程碑徽章</view>
+  <view class="badges-grid">
+    <view class="badge-item {{item.earned ? 'earned' : 'locked'}}" wx:for="{{badges}}" wx:key="days">
+      <view class="badge-icon">{{item.icon}}</view>
+      <view class="badge-days">{{item.days}}天</view>
+      <view class="badge-name">{{item.name}}</view>
+      <view class="badge-status">{{item.earned ? '已获得' : item.daysLeft + '天后解锁'}}</view>
+    </view>
+  </view>
+</view>
