@@ -1,12 +1,35 @@
 <view class="container">
-  <!-- 数据卡片 -->
-  <view class="card">
-    <view class="card-title">📊 戒烟数据</view>
-    <view class="row"><text class="lbl">开始日期</text><text class="val">{{startDate || '未设置'}}</text></view>
-    <view class="row"><text class="lbl">连续天数</text><text class="val green">{{streak}} 天</text></view>
-    <view class="row"><text class="lbl">累计成功</text><text class="val">{{totalDays}} 天</text></view>
-    <view class="row"><text class="lbl">节省金钱</text><text class="val green">¥{{moneySaved}}</text></view>
-    <view class="row"><text class="lbl">相当于</text><text class="val">{{cigarettesAvoided}} 支烟</text></view>
+
+  <!-- 顶部蓝色 banner -->
+  <view class="banner">
+    <view class="banner-title">戒烟数据</view>
+    <view class="banner-sub">{{startDate || '请先设置开始日期'}}</view>
+  </view>
+
+  <!-- 核心数据 2x2 网格 -->
+  <view class="grid-row">
+    <view class="grid-card blue">
+      <view class="grid-lbl">连续天数</view>
+      <view class="grid-val">{{streak}}</view>
+      <view class="grid-unit">天</view>
+    </view>
+    <view class="grid-card purple">
+      <view class="grid-lbl">累计成功</view>
+      <view class="grid-val">{{totalDays}}</view>
+      <view class="grid-unit">天</view>
+    </view>
+  </view>
+  <view class="grid-row">
+    <view class="grid-card green">
+      <view class="grid-lbl">节省金钱</view>
+      <view class="grid-val">{{moneySaved}}</view>
+      <view class="grid-unit">元</view>
+    </view>
+    <view class="grid-card orange">
+      <view class="grid-lbl">少抽支数</view>
+      <view class="grid-val">{{cigarettesAvoided}}</view>
+      <view class="grid-unit">支</view>
+    </view>
   </view>
 
   <!-- 健康恢复时间线 -->
@@ -14,7 +37,10 @@
     <view class="card-title">💚 健康恢复进度</view>
     <view class="timeline">
       <view class="tl-item {{item.done ? 'done' : 'pending'}}" wx:for="{{healthMilestones}}" wx:key="hours">
-        <view class="tl-dot"></view>
+        <view class="tl-left">
+          <view class="tl-dot"></view>
+          <view class="tl-line" wx:if="{{index < healthMilestones.length - 1}}"></view>
+        </view>
         <view class="tl-content">
           <view class="tl-time">{{item.label}}</view>
           <view class="tl-desc">{{item.desc}}</view>
@@ -23,14 +49,20 @@
     </view>
   </view>
 
-  <!-- 最近打卡记录 -->
+  <!-- 最近7天 -->
   <view class="card">
     <view class="card-title">📅 最近 7 天</view>
     <view class="week-row">
-      <view class="day-item {{item.status}}" wx:for="{{recentDays}}" wx:key="date">
-        <view class="day-dot"></view>
+      <view class="day-item" wx:for="{{recentDays}}" wx:key="date">
+        <view class="day-dot {{item.status}}"></view>
         <view class="day-label">{{item.weekday}}</view>
       </view>
     </view>
+    <view class="week-legend">
+      <view class="legend-item"><view class="legend-dot success"></view><text>成功</text></view>
+      <view class="legend-item"><view class="legend-dot fail"></view><text>失败</text></view>
+      <view class="legend-item"><view class="legend-dot empty"></view><text>未打卡</text></view>
+    </view>
   </view>
+
 </view>

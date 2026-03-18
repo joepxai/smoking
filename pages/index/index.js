@@ -1,4 +1,5 @@
 const storage = require('../../utils/storage')
+const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六']
 
 Page({
   data: {
@@ -6,10 +7,13 @@ Page({
     totalDays: 0,
     moneySaved: 0,
     daysSinceStart: 0,
+    cigarettesAvoided: 0,
+    badgeCount: 0,
     todayRecord: null,
     today: '',
     reason: '',
     hasSettings: false,
+    recentDays: [],
   },
 
   onShow() {
@@ -22,15 +26,36 @@ Page({
     const streak = storage.calcStreak(settings.startDate)
     const totalDays = storage.calcTotal(settings.startDate)
     const daysSinceStart = storage.calcDaysSinceStart(settings.startDate)
-    const moneySaved = totalDays * (settings.pricePerDay || 20)
-    const todayRecord = storage.getTodayRecord()
-    const today = storage.getTodayKey()
+    const pricePerDay = settings.pricePerDay || 20
+    const moneySaved = totalDays * pricePerDay
+    const cigarettesAvoided = totalDays * 20
+
+    // 徽章数量
+    const BADGE_DAYS = [1, 3, 7, 14, 30, 60, 100, 365]
+    const badgeCount = BADGE_DAYS.filter(d => streak >= d).length
+
+    // 最近7天
+    const records = storage.getRecords()
+    const recentDays = []
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date()
+      d.setDate(d.getDate() - i)
+      const key = d.toISOString().slice(0, 10)
+      recentDays.push({
+        date: key,
+        status: records[key] || 'empty',
+        weekday: WEEKDAYS[d.getDay()],
+      })
+    }
 
     this.setData({
       streak, totalDays, moneySaved, daysSinceStart,
-      todayRecord, today,
+      cigarettesAvoided, badgeCount,
+      todayRecord: storage.getTodayRecord(),
+      today: storage.getTodayKey(),
       reason: settings.reason || '',
       hasSettings,
+      recentDays,
     })
   },
 
@@ -46,11 +71,10 @@ Page({
       wx.showToast({ title: '今天已经打卡了', icon: 'none' })
       return
     }
-    if (status === 'success') {
-      wx.showToast({ title: '打卡成功！继续加油 💪', icon: 'success' })
-    } else {
-      wx.showToast({ title: '没关系，明天重新开始', icon: 'none' })
-    }
+    wx.showToast({
+      title: status === 'success' ? '打卡成功 💪' : '没关系，明天继续',
+      icon: status === 'success' ? 'success' : 'none'
+    })
     this.loadData()
   },
 

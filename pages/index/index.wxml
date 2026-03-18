@@ -1,43 +1,75 @@
 <view class="container">
-  <!-- 顶部状态卡 -->
-  <view class="hero-card">
-    <view class="streak-label">连续戒烟</view>
-    <view class="streak-number">{{streak}}</view>
-    <view class="streak-unit">天</view>
-    <view class="reason" wx:if="{{reason}}">💪 {{reason}}</view>
+
+  <!-- 顶部 Hero 渐变区 -->
+  <view class="hero">
+    <view class="hero-top">
+      <view class="hero-label">连续戒烟</view>
+      <view class="hero-reason" wx:if="{{reason}}">💪 {{reason}}</view>
+    </view>
+    <view class="hero-number-row">
+      <text class="hero-number">{{streak}}</text>
+      <text class="hero-unit">天</text>
+    </view>
+    <view class="hero-sub">累计成功 {{totalDays}} 天 · 已节省 ¥{{moneySaved}}</view>
+
+    <!-- 周历打卡条 -->
+    <view class="week-bar">
+      <view class="week-item {{item.status}}" wx:for="{{recentDays}}" wx:key="date">
+        <view class="week-dot"></view>
+        <view class="week-day">{{item.weekday}}</view>
+      </view>
+    </view>
   </view>
 
-  <!-- 今日打卡 -->
+  <!-- 今日打卡卡片 -->
   <view class="card checkin-card">
-    <view class="checkin-title">今日打卡</view>
-    <view class="checkin-date">{{today}}</view>
+    <view class="checkin-date-row">
+      <text class="checkin-title">今日打卡</text>
+      <text class="checkin-date">{{today}}</text>
+    </view>
 
     <view wx:if="{{todayRecord === null}}" class="btn-group">
-      <button class="btn-success" bindtap="onCheckin" data-status="success">✅ 今天成功了</button>
-      <button class="btn-fail" bindtap="onCheckin" data-status="fail">😔 今天失败了</button>
+      <button class="btn-success" bindtap="onCheckin" data-status="success">
+        <text class="btn-icon">✅</text> 今天成功了
+      </button>
+      <button class="btn-fail" bindtap="onCheckin" data-status="fail">
+        <text class="btn-icon">😔</text> 今天失败了
+      </button>
     </view>
 
     <view wx:else class="checked-result">
-      <text wx:if="{{todayRecord === 'success'}}" class="result-success">✅ 今天打卡成功！继续加油</text>
-      <text wx:else class="result-fail">😔 没关系，明天重新开始</text>
+      <view wx:if="{{todayRecord === 'success'}}" class="result-badge success">
+        <text>✅ 今日已打卡成功，继续加油！</text>
+      </view>
+      <view wx:else class="result-badge fail">
+        <text>😔 没关系，明天重新开始</text>
+      </view>
     </view>
   </view>
 
-  <!-- 快速统计 -->
-  <view class="card stats-row">
-    <view class="stat-item">
-      <view class="stat-val">{{totalDays}}</view>
-      <view class="stat-lbl">累计天数</view>
+  <!-- 数据网格 -->
+  <view class="grid-row">
+    <view class="grid-card">
+      <view class="grid-icon">🗓️</view>
+      <view class="grid-val">{{daysSinceStart}}</view>
+      <view class="grid-lbl">坚持天数</view>
     </view>
-    <view class="stat-divider"></view>
-    <view class="stat-item">
-      <view class="stat-val">¥{{moneySaved}}</view>
-      <view class="stat-lbl">节省金钱</view>
+    <view class="grid-card">
+      <view class="grid-icon">💰</view>
+      <view class="grid-val">¥{{moneySaved}}</view>
+      <view class="grid-lbl">节省金钱</view>
     </view>
-    <view class="stat-divider"></view>
-    <view class="stat-item">
-      <view class="stat-val">{{daysSinceStart}}</view>
-      <view class="stat-lbl">坚持天数</view>
+  </view>
+  <view class="grid-row">
+    <view class="grid-card">
+      <view class="grid-icon">🚬</view>
+      <view class="grid-val">{{cigarettesAvoided}}</view>
+      <view class="grid-lbl">少抽支数</view>
+    </view>
+    <view class="grid-card">
+      <view class="grid-icon">🏅</view>
+      <view class="grid-val">{{badgeCount}}</view>
+      <view class="grid-lbl">获得徽章</view>
     </view>
   </view>
 
@@ -45,4 +77,5 @@
   <view wx:if="{{!hasSettings}}" class="card setup-tip" bindtap="goSettings">
     <text>👆 先去设置开始日期和戒烟理由</text>
   </view>
+
 </view>

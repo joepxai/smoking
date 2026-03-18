@@ -6,8 +6,8 @@
     "pages/settings/settings"
   ],
   "tabBar": {
-    "color": "#999999",
-    "selectedColor": "#4CAF50",
+    "color": "#9CA3AF",
+    "selectedColor": "#4F72FF",
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [
@@ -19,9 +19,10 @@
   },
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarBackgroundColor": "#4F72FF",
     "navigationBarTitleText": "戒烟打卡",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#EEF2FF"
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

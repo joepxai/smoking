@@ -1,31 +1,44 @@
 <view class="container">
-  <view class="card">
-    <view class="card-title">⚙️ 基本设置</view>
+  <view class="banner">
+    <view class="banner-title">⚙️ 设置</view>
+    <view class="banner-sub">个性化你的戒烟计划</view>
+  </view>
 
+  <view class="card">
     <view class="field">
-      <view class="field-label">开始戒烟日期</view>
+      <view class="field-left">
+        <view class="field-icon">📅</view>
+        <view class="field-label">开始戒烟日期</view>
+      </view>
       <picker mode="date" value="{{startDate}}" bindchange="onDateChange">
         <view class="field-value {{startDate ? '' : 'placeholder'}}">
-          {{startDate || '点击选择日期'}}
+          {{startDate || '点击选择'}}
         </view>
       </picker>
     </view>
 
     <view class="field">
-      <view class="field-label">每天烟钱（元）</view>
+      <view class="field-left">
+        <view class="field-icon">💰</view>
+        <view class="field-label">每天烟钱（元）</view>
+      </view>
       <input class="field-input" type="digit" value="{{pricePerDay}}" bindinput="onPriceInput" placeholder="20" />
     </view>
 
     <view class="field last">
-      <view class="field-label">戒烟理由</view>
-      <input class="field-input" value="{{reason}}" bindinput="onReasonInput" placeholder="写下你的戒烟理由..." />
+      <view class="field-left">
+        <view class="field-icon">💪</view>
+        <view class="field-label">戒烟理由</view>
+      </view>
+      <input class="field-input" value="{{reason}}" bindinput="onReasonInput" placeholder="写下你的理由..." />
     </view>
   </view>
 
   <button class="save-btn" bindtap="onSave">保存设置</button>
 
   <view class="card danger-card">
-    <view class="card-title">⚠️ 危险操作</view>
+    <view class="danger-title">⚠️ 危险操作</view>
+    <view class="danger-desc">清除后所有打卡记录将无法恢复</view>
     <button class="reset-btn" bindtap="onReset">清除所有数据</button>
   </view>
 </view>

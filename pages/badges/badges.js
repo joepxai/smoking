@@ -12,7 +12,7 @@ const BADGE_DEFS = [
 ]
 
 Page({
-  data: { badges: [] },
+  data: { badges: [], earnedCount: 0, progressPct: 0 },
 
   onShow() {
     const settings = storage.getSettings()
@@ -22,6 +22,8 @@ Page({
       earned: streak >= b.days,
       daysLeft: Math.max(0, b.days - streak),
     }))
-    this.setData({ badges })
+    const earnedCount = badges.filter(b => b.earned).length
+    const progressPct = Math.round((earnedCount / badges.length) * 100)
+    this.setData({ badges, earnedCount, progressPct })
   },
 })
