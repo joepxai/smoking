@@ -7,6 +7,16 @@ const KEYS = {
   RECORDS: 'qs_records',
 }
 
+const CIGARETTES_PER_DAY = 20
+
+// 将 Date 对象格式化为本地 'YYYY-MM-DD'（避免 toISOString 的 UTC 时区问题）
+function dateToKey(d) {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
 function getSettings() {
   return wx.getStorageSync(KEYS.SETTINGS) || {
     startDate: '',
@@ -28,11 +38,7 @@ function saveRecords(records) {
 }
 
 function getTodayKey() {
-  const d = new Date()
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
+  return dateToKey(new Date())
 }
 
 function checkin(status) {
@@ -54,9 +60,11 @@ function calcStreak(startDate) {
   const records = getRecords()
   const today = getTodayKey()
   let streak = 0
-  let cur = new Date(today)
-  while (true) {
-    const key = cur.toISOString().slice(0, 10)
+  let cur = new Date()
+  // 最多回溯 365*3 天，防止极端情况下无限循环
+  const maxDays = 365 * 3
+  for (let i = 0; i < maxDays; i++) {
+    const key = dateToKey(cur)
     if (key < startDate) break
     if (records[key] === 'success') {
       streak++
@@ -87,13 +95,34 @@ function calcTotal(startDate) {
 // 距离开始戒烟的总天数
 function calcDaysSinceStart(startDate) {
   if (!startDate) return 0
-  const start = new Date(startDate)
-  const now = new Date()
+  // 使用本地日期字符串比较，避免时区偏差
+  const today = getTodayKey()
+  const start = new Date(startDate + 'T00:00:00')
+  const now = new Date(today + 'T00:00:00')
   const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24))
   return Math.max(0, diff)
 }
 
+// 获取最近 n 天的打卡记录（含星期标签），供多页面复用
+const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六']
+function getRecentDays(n) {
+  const records = getRecords()
+  const days = []
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date()
+    d.setDate(d.getDate() - i)
+    const key = dateToKey(d)
+    days.push({
+      date: key,
+      status: records[key] || 'empty',
+      weekday: WEEKDAYS[d.getDay()],
+    })
+  }
+  return days
+}
+
 module.exports = {
+  CIGARETTES_PER_DAY,
   getSettings,
   saveSettings,
   getRecords,
@@ -103,4 +132,5 @@ module.exports = {
   calcStreak,
   calcTotal,
   calcDaysSinceStart,
+  getRecentDays,
 }

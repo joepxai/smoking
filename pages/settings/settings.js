@@ -45,7 +45,8 @@ Page({
       confirmColor: '#f44336',
       success(res) {
         if (res.confirm) {
-          wx.clearStorageSync()
+          wx.removeStorageSync('qs_settings')
+          wx.removeStorageSync('qs_records')
           wx.showToast({ title: '已清除', icon: 'success' })
         }
       },

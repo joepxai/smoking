@@ -9,8 +9,6 @@ const HEALTH_MILESTONES = [
   { hours: 8760, label: '1年', desc: '冠心病风险降低一半' },
 ]
 
-const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六']
-
 Page({
   data: {
     startDate: '',
@@ -31,7 +29,7 @@ Page({
     const streak = storage.calcStreak(settings.startDate)
     const totalDays = storage.calcTotal(settings.startDate)
     const moneySaved = totalDays * (settings.pricePerDay || 20)
-    const cigarettesAvoided = totalDays * 20 // 按一包20支算
+    const cigarettesAvoided = totalDays * storage.CIGARETTES_PER_DAY
     const daysSinceStart = storage.calcDaysSinceStart(settings.startDate)
     const hoursSinceStart = daysSinceStart * 24
 
@@ -40,24 +38,11 @@ Page({
       done: hoursSinceStart >= m.hours,
     }))
 
-    // 最近7天
-    const records = storage.getRecords()
-    const recentDays = []
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date()
-      d.setDate(d.getDate() - i)
-      const key = d.toISOString().slice(0, 10)
-      recentDays.push({
-        date: key,
-        status: records[key] || 'empty',
-        weekday: WEEKDAYS[d.getDay()],
-      })
-    }
-
     this.setData({
       startDate: settings.startDate || '',
       streak, totalDays, moneySaved, cigarettesAvoided,
-      healthMilestones, recentDays,
+      healthMilestones,
+      recentDays: storage.getRecentDays(7),
     })
   },
 })

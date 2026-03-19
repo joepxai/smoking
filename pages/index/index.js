@@ -1,5 +1,4 @@
 const storage = require('../../utils/storage')
-const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六']
 
 Page({
   data: {
@@ -28,25 +27,10 @@ Page({
     const daysSinceStart = storage.calcDaysSinceStart(settings.startDate)
     const pricePerDay = settings.pricePerDay || 20
     const moneySaved = totalDays * pricePerDay
-    const cigarettesAvoided = totalDays * 20
+    const cigarettesAvoided = totalDays * storage.CIGARETTES_PER_DAY
 
-    // 徽章数量
     const BADGE_DAYS = [1, 3, 7, 14, 30, 60, 100, 365]
     const badgeCount = BADGE_DAYS.filter(d => streak >= d).length
-
-    // 最近7天
-    const records = storage.getRecords()
-    const recentDays = []
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date()
-      d.setDate(d.getDate() - i)
-      const key = d.toISOString().slice(0, 10)
-      recentDays.push({
-        date: key,
-        status: records[key] || 'empty',
-        weekday: WEEKDAYS[d.getDay()],
-      })
-    }
 
     this.setData({
       streak, totalDays, moneySaved, daysSinceStart,
@@ -55,7 +39,7 @@ Page({
       today: storage.getTodayKey(),
       reason: settings.reason || '',
       hasSettings,
-      recentDays,
+      recentDays: storage.getRecentDays(7),
     })
   },
 
